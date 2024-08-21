@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+		<link rel="stylesheet" type="text/css" href="CSS/tout.css">
+		<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+
+		<script src="app/index.js"></script>
+
+		<title>
+			FlowWave
+		</title>
+	</head>
+	<body class="bg-body-0 dark:bg-body-1 text-primary-0 dark:text-primary-1">
+		<main class="w-full h-screen">
+			<div id="login" class="h-full flex justify-center bg-gradient-to-br from-sky-400 to-indigo-600 dark:from-rose-500 dark:to-red-900">
+				<div class="fixed flex w-[60%] h-12 p-4">
+					<span class="self-center font-bold text-xl text-body-0">
+						FlowWave
+					</span>
+					<div class="hidden md:block border-l border-dim-0 dark:border-dim-1 mx-4"></div>
+					<span class="self-center tracking-tight text-body-0">
+						File Transfer App
+					</span>
+				</div>
+
+				<div class="flex flex-col p-4 justify-between self-center rounded-lg shadow-2xl bg-body-0 dark:bg-body-1 w-72 h-72">
+					<div>
+						<p class="font-bold text-xl ml-2">
+							Iniciar sesión
+						</p>
+
+						<div>
+							<label class="text-xs uppercase text-dim-2 dark:text-dim-3" for="server_ip">
+								Dirección IP del servidor
+							</label>
+							<input id="server_ip" type="text" placeholder="IP" value="localhost" class="w-full px-2 transition-[border] duration-150 border border-dim-0 dark:border-dim-1 hover:border-sky-500 dark:hover:border-pink-600 focus:outline-none focus:ring focus:border-blue-500 dark:focus:border-pink-500 rounded-lg bg-body-0 dark:bg-body-1">
+						</div>
+
+						<div class="my-3">
+							<label class="text-xs uppercase text-dim-2 dark:text-dim-3" for="server_port">
+								Puerto del servidor
+							</label>
+							<input id="server_port" type="text" placeholder="Puerto" value="6789" class="w-full px-2 transition-[border] duration-150 border border-dim-0 dark:border-dim-1 hover:border-sky-500 dark:hover:border-pink-600 focus:outline-none focus:ring focus:border-blue-500 dark:focus:border-pink-500 rounded-lg bg-body-0 dark:bg-body-1">
+						</div>
+
+						<button class="flex justify-center w-full h-8 bg-body-0 dark:bg-body-1 transition-[border] duration-150 border-2 border-dim-0 dark:border-dim-1 hover:border-sky-500 dark:hover:border-pink-600 rounded-lg" onclick={connect()}>
+							<span id="connect_button_text">
+								Conectar
+							</span>
+							<span id="connect_button_spinner" class="self-center hidden">
+								<svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-sky-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+									<path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+								</svg>
+								<span class="sr-only">Cargando...</span>
+							</span>
+						</button>
+					</div>
+
+					<button class="text-xs text-dim-2 dark:text-dim-3 text-right">
+						Mostrar opciones avanzadas...
+					</button>
+				</div>
+			</div>
+
+			<div id="error_popup" class="hidden fixed w-96 bottom-4 m-4 md:m-0 md:right-4 bg-sidebar-0 dark:bg-sidebar-1 p-4 rounded-xl border border-dim-0 dark:border-dim-1">
+				<div class="flex justify-between">
+					<p id="error_data" class="not-italic self-center pr-2"></p>
+					<button class="pl-2 border-l border-[#eaecef] dark:border-[#4c525c]">
+						<i class="fa fa-close fa-2x" onclick="{toggleErrorNotificationVisibility(true)}">
+						</i>
+					</button>
+				</div>
+				<div class="flex flex-col justify-center absolute -left-3 -top-3 w-8 h-8 rounded-full bg-sky-500">
+					<p id="error_count" class="text-white text-center">1</p>
+				</div>
+			</div>
+		</main>
+
+		<script src="app/main.js"></script>
+	</body>
+</html>

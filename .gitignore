@@ -1,0 +1,10 @@
+# Directories
+.idea
+__pycache__
+__pycache__/*
+
+# Executables
+tailwindcss*
+
+# OS specific
+*.DS_Store

@@ -1,0 +1,5 @@
+exclude: [".sass-cache/", ".jekyll-cache/", "gemfiles/",
+          "Gemfile", "Gemfile.lock", "vendor/bundle/",
+          "vendor/cache/", "vendor/gems/", "vendor/ruby/",
+          "*.py", "CSS/tin.css", "*.md"
+]
