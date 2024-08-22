@@ -1,4 +1,23 @@
 let socket = null;
+let connectionOpened = false;
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    ["server_ip", "server_port"].forEach((id) => {
+        document.getElementById(id).addEventListener("keyup", (event) => {
+            if (event.key === "Enter")
+                connect();
+        });
+    });
+
+    document.getElementById("input").addEventListener("keyup", (event) => {
+        if (event.key === "Enter")
+            send();
+    });
+
+    // Debug
+    // connect();
+});
 
 
 function connect() {
@@ -12,21 +31,41 @@ function connect() {
 
     socket = new WebSocket("ws://" + ip + ":" + port);
     socket.onerror = () => {
-        showError("No se encontró el servidor");
-        waitForConnection(false);
+        if (connectionOpened) {
+            showError("La conexión fue terminada");
+            console.log("Connection reset");
+        } else {
+            showError("No se encontró el servidor");
+            console.log("Server not found");
+        }
 
-        console.log("Connection timeout");
+        waitForConnection(false);
+        toggleLoginVisibility(false);
+
+        connectionOpened = false;
         socket = null;
     }
 
     socket.onopen = () => {
+        connectionOpened = true;
         toggleErrorNotificationVisibility(true);
-        waitForConnection(false);
+        toggleLoginVisibility(true);
     }
 
     socket.onmessage = (event) => {
         let data = JSON.parse(event.data);
+        document.getElementById("output").value = data.data;
     }
+}
+
+
+function disconnect() {
+    if (socket !== null && socket.readyState !== WebSocket.CLOSED) {
+        socket.close();
+        socket = null;
+    }
+
+    toggleLoginVisibility(false);
 }
 
 
@@ -34,5 +73,10 @@ function send() {
     if (socket === null || socket.readyState === WebSocket.CLOSED)
         return;
 
-    // socket.send(msg);
+    let textarea = document.getElementById("input");
+    let msg = textarea.value;
+    msg = msg.substring(0, msg.length - 1);
+    textarea.value = "";
+
+    socket.send(msg);
 }

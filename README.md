@@ -25,7 +25,16 @@ Para el desarrollo se requiere de lo siguiente:
   - Opcionalmente: [Tailwind Standalone CLI](https://tailwindcss.com/blog/standalone-cli)
 
 
+### Uso
+Para la ejecución del cliente únicamente se requiere de visualizar
+el archivo `index.html` en un navegador web.
+
+
 ### Historial de cambios
+
+#### v0.0.2
+- Agregado spinner al conectarse a un servidor
+- **[WIP]** Agregada vista CLI 
 
 #### v0.0.1
 - Proyecto inicial

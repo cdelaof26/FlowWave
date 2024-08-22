@@ -15,6 +15,11 @@ function toggleElementVisibility(elementId, hide) {
 }
 
 
+function toggleElementState(elementId, enable) {
+    document.getElementById(elementId).disabled = !enable;
+}
+
+
 function toggleErrorNotificationVisibility(hide) {
     error_count = hide ? 0 : error_count + 1;
     toggleElementVisibility("error_popup", hide);
@@ -29,6 +34,17 @@ function showError(msg) {
 
 
 function waitForConnection(showSpinner) {
+    toggleElementState("connection_trigger", !showSpinner);
+    toggleElementState("server_ip", !showSpinner);
+    toggleElementState("server_port", !showSpinner);
     toggleElementVisibility("connect_button_text", showSpinner);
     toggleElementVisibility("connect_button_spinner", !showSpinner);
+}
+
+
+function toggleLoginVisibility(hideLogin) {
+    waitForConnection(false);
+    toggleElementVisibility("login", hideLogin);
+    toggleElementVisibility("app", !hideLogin);
+    toggleElementVisibility("logout_button", !hideLogin);
 }
