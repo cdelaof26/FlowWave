@@ -15,6 +15,19 @@ function toggleElementVisibility(elementId, hide) {
 }
 
 
+function toggleButton(elementId, highlight) {
+    let button = document.getElementById(elementId);
+
+    let properties = ["bg-gradient-to-br", "from-sky-400", "to-indigo-600", "dark:from-rose-500", "dark:to-red-900", "text-body-0"];
+    properties.forEach((property) => {
+        if (highlight)
+            button.classList.add(property);
+        else
+            button.classList.remove(property);
+    });
+}
+
+
 function toggleElementState(elementId, enable) {
     document.getElementById(elementId).disabled = !enable;
 }
@@ -47,4 +60,21 @@ function toggleLoginVisibility(hideLogin) {
     toggleElementVisibility("login", hideLogin);
     toggleElementVisibility("app", !hideLogin);
     toggleElementVisibility("logout_button", !hideLogin);
+    toggleAppMode(true);
+    toggleWorkingState(false);
+}
+
+
+function toggleWorkingState(working) {
+    toggleElementState("send_button", !working);
+    toggleElementVisibility("send_button_icon", working);
+    toggleElementVisibility("send_button_spinner", !working);
+}
+
+
+function toggleAppMode(showCLI) {
+    toggleElementVisibility("cli", !showCLI);
+    toggleElementVisibility("graphic", showCLI);
+    toggleButton("cli_toggle", showCLI);
+    toggleButton("graphic_toggle", !showCLI);
 }

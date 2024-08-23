@@ -26,11 +26,19 @@ Para el desarrollo se requiere de lo siguiente:
 
 
 ### Uso
-Para la ejecución del cliente únicamente se requiere de visualizar
-el archivo `index.html` en un navegador web.
+Este cliente únicamente se requiere un navegador web para visualizar 
+el archivo `index.html`.
+
+Para la transferencia de archivos se requiere de otro dispositivo 
+que haga de servidor por medio de [FlowWaveServer](https://github.com/cdelaof26/FlowWaveServer).
 
 
 ### Historial de cambios
+
+#### v0.0.3
+**[ Compatible con FlowWaveServer v0.0.2 y anteriores ]**
+- Mejorado el diseño responsivo
+- Ahora ejecutar un comando no limpiará la salida automáticamente
 
 #### v0.0.2
 - Agregado spinner al conectarse a un servidor
