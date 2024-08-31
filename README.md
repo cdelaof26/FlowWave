@@ -46,8 +46,13 @@ que haga de servidor por medio de [FlowWaveServer](https://github.com/cdelaof26/
 
 ### Historial de cambios
 
+#### v0.0.5
+**[ Compatible con FlowWaveServer v0.0.2 hasta v0.0.4 ]**
+- Implementada vista gráfica (UI) **[WIP]**
+  - **Requiere de FlowWaveServer v0.0.4**
+  - **TODO**: Implementar descarga y subida de archivos por esta interfaz
+
 #### v0.0.4
-**[ Compatible con FlowWaveServer v0.0.3 y anteriores ]**
 - Implementado subir y descargar archivos
   - **Requiere de FlowWaveServer v0.0.3**
 

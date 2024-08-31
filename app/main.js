@@ -1,5 +1,6 @@
 let socket = null;
 let connectionOpened = false;
+let initialSetupEnded = false;
 let terminalOutput = "";
 let working = false;
 
@@ -19,6 +20,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    ["cd_home,", "cd_desk,Desktop", "cd_docs,Documents",
+        "cd_musc,Music", "cd_down,Downloads", "cd_pics,Pictures"].forEach((id_data) => {
+            let data = id_data.split(",");
+            document.getElementById(data[0]).addEventListener("click", () => {
+                cd("~/" + data[1]);
+            });
+    });
+
+    document.getElementById("path").addEventListener("keyup", (event) => {
+        if (event.key === "Enter")
+            cd(document.getElementById("path").value);
+    });
+
     document.getElementById("input").addEventListener("keyup", (event) => {
         if (event.key === "Enter")
             send();
@@ -34,6 +48,7 @@ function connect() {
         return;
 
     waitForConnection(true);
+    initialSetupEnded = false;
 
     let ip = getText("server_ip");
     let port = getText("server_port");
@@ -65,6 +80,9 @@ function connect() {
         toggleLoginVisibility(true);
         socket.send("server_platform");
         socket.send("upload_policy");
+        socket.send("pwd");
+        if (!cliMode)
+            socket.send("uls false");
     }
 
     filesize = 0;
@@ -163,7 +181,8 @@ function uploadFile() {
 
     let file = selector.files[0];
 
-    terminalOutput += "put " + file.name + "\n$ ";
+    if (cliMode)
+        terminalOutput += "put " + file.name + "\n$ ";
     working = true;
     toggleWorkingState(working);
     socket.send(file.size + "up:" + file.name);
@@ -229,7 +248,8 @@ function receive(event) {
     }
 
     if (data.replace(/\d+:.+/, "").length === 0) {
-        terminalOutput += "$ ";
+        if (cliMode)
+            terminalOutput += "$ ";
         updateOutputArea();
 
         let size_name = data.split(":");
@@ -243,17 +263,36 @@ function receive(event) {
         let output = json_data.data;
         if (output.includes("Upload files is"))
             canUploadData = !output.includes("not allowed")
-        else
-            terminalOutput += output + (output ? "\n$ " : "$ ");
+        else {
+            if (!initialSetupEnded && output.startsWith("pwd"))
+                initialSetupEnded = true;
+
+            if (cliMode || !initialSetupEnded)
+                terminalOutput += output + (output ? "\n$ " : "$ ");
+        }
+
+        if (!cliMode)
+            updateUI(output);
     } catch (e) {
         console.error(e);
         showError("Error al leer la salida del comando");
-        terminalOutput += "$ ";
+        if (cliMode)
+            terminalOutput += "$ ";
     }
 
     working = false;
     toggleWorkingState(working);
     updateOutputArea();
+}
+
+
+function cd(location) {
+    if (socket === null || socket.readyState === WebSocket.CLOSED)
+        return;
+
+    socket.send("cd " + location);
+    socket.send("pwd");
+    socket.send("uls false");
 }
 
 
